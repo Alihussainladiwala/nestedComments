@@ -1,9 +1,11 @@
 import React, {useState} from 'react'
+import "./ReplyBox.css"
 
-function ReplyBox({onReply}) {
+function ReplyBox({onReply, cancel}) {
 
   const [reply, setReply] = useState("")
   const [showTextBox, setShowTextBox] = useState(false);
+  const [onFocus, setOnFocus] = useState(false);
   return (
     <div><div
     style={{
@@ -15,17 +17,16 @@ function ReplyBox({onReply}) {
     <div>
       <input
         placeholder="reply..."
-        style={{
-          marginLeft: "10px",
-          borderStyle: "none none solid none",
-        }}
+        onFocus={()=>setOnFocus(true)}
+        onBlur={()=>setOnFocus(false)}
+        className="reply-box-no-focus"
         type="text"
         value={reply}
         onChange={(e) => setReply(e.target.value)}
       ></input>
     </div>
 
-    <div 
+    {(onFocus || reply.length !== 0) && <div 
       style={{
         display: "flex",
         alignItems: "flex-end",
@@ -33,7 +34,7 @@ function ReplyBox({onReply}) {
       }}
     >
       <div>
-        <button
+      {reply.length === 0 && <button
           style={{
             borderRadius: "5px",
             borderStyle: "none",
@@ -43,9 +44,25 @@ function ReplyBox({onReply}) {
             onReply(reply);
             setReply("");
           }}
+          disabled
         >
           Reply
-        </button>
+        </button> }
+        {reply.length !== 0 && <button
+          style={{
+            borderRadius: "5px",
+            borderStyle: "none",
+            padding: "8px",
+            backgroundColor: "blue",
+            color: "white"
+          }}
+          onClick={() => {
+            onReply(reply);
+            setReply("");
+          }}
+        >
+          Reply
+        </button>}
       </div>
       <div style={{ paddingLeft: "5px" }}>
         <button
@@ -55,13 +72,13 @@ function ReplyBox({onReply}) {
             padding: "8px",
           }}
           onClick={() => {
-            setShowTextBox(false);
+            cancel();
           }}
         >
           Cancel
         </button>
       </div>
-    </div>
+    </div>}
   </div></div>
   )
 }
