@@ -1,0 +1,50 @@
+.recursive-align {
+    margin-left: 10px;
+    border-left: 1px;
+    border-left-style: solid;
+    border-color: gray;
+    border: "none none none solid";
+    padding: 5px;
+  }
+  
+  .recursive-reply-box-align {
+    display: grid;
+    grid-template-rows: 32px 32px;
+    max-width: 30px;
+  }
+  
+  .recursive-view-replies-button {
+    margin-left: 10px;
+    color: gray;
+  }
+  
+  .recursive-reply-button {
+    margin-left: 5px;
+    padding: 0px 5px 1px 5px;
+    font-size: 15px;
+  }
+  
+  .recursive-reply-button-div:hover {
+    background-color: rgb(235, 233, 233);
+    max-width: 60px;
+    border-radius: 50px;
+  }
+  
+  .circle {
+    display: inline-block;
+    background-color: #00d53b;
+    margin: 7px;
+    border-radius: 50%;
+  }
+  
+  .circle-inner {
+    color: white;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    text-decoration: none;
+    height: 30px;
+    width: 30px;
+    font-size: 22px;
+  }
+  
