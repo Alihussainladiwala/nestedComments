@@ -16,6 +16,7 @@
   .recursive-view-replies-button {
     margin-left: 10px;
     color: gray;
+    cursor: pointer;
   }
   
   .recursive-reply-button {
@@ -24,9 +25,13 @@
     font-size: 15px;
   }
   
+  .recursive-reply-button-div{
+    max-width: 60px;
+    cursor: pointer;
+  }
+
   .recursive-reply-button-div:hover {
     background-color: rgb(235, 233, 233);
-    max-width: 60px;
     border-radius: 50px;
   }
   
@@ -35,6 +40,7 @@
     background-color: #00d53b;
     margin: 7px;
     border-radius: 50%;
+    cursor: pointer;
   }
   
   .circle-inner {
@@ -46,5 +52,15 @@
     height: 30px;
     width: 30px;
     font-size: 22px;
+  }
+
+  .show-more-button{
+    margin-left: 10px; 
+    color: gray;
+    cursor: pointer;
+  }
+
+  .nested-comment{
+    padding-top: 10px
   }
   

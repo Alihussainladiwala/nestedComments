@@ -1,24 +1,78 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReplyBox from "../ReplyBox/ReplyBox";
 import "./NestedComments.css";
 import { v4 as uuid } from "uuid";
 
-export function NestedComments({data}) {
-//   let data = { children: [], id: 0 };
-  
+export function NestedComments({ data, commentAdded, userName }) {
+  let [treeData, setTreeData] = useState({ children: [], id: 0 });
 
-  let [treeData, setTreeData] = useState(data);
-  // let [treeKey, setTreeKey] = useState(0);
+  const getRandomColor = () => {
+    var color = "#";
+    for (var i = 0; i < 6; i++) {
+      color += Math.floor(Math.random() * 10);
+    }
+    return color;
+  };
 
-  let Recurse = ({ root, callBack }) => {
+  const createTree = (src, mapRelations) => {
+    if (!mapRelations.has(src.child)) {
+      let obj = {
+        id: src.child,
+        name: src.name,
+        comment: src.comment,
+        color: getRandomColor(),
+        children: [],
+      };
+      return obj;
+    } else {
+      let children = [];
+      let obj = {
+        id: src.child,
+        name: src.name,
+        comment: src.comment,
+        color: getRandomColor(),
+        children,
+      };
+
+      mapRelations.get(src.child).forEach((ele) => {
+        children.push(createTree(ele, mapRelations));
+      });
+
+      return obj;
+    }
+  };
+
+  const createMap = (data) => {
+    let mapRelations = new Map();
+
+    data.forEach((ele) => {
+      if (mapRelations.has(ele.parent)) {
+        mapRelations.set(ele.parent, [...mapRelations.get(ele.parent), ele]);
+      } else {
+        mapRelations.set(ele.parent, [ele]);
+      }
+    });
+
+    return mapRelations;
+  };
+
+  useEffect(() => {
+    let mapRelations = createMap(data);
+    let res = [];
+    mapRelations.get(-1).forEach((ele, index) => {
+      res.push(createTree(mapRelations.get(-1)[index], mapRelations));
+    });
+
+    let nestedData = { children: [...res], id: 0 };
+    setTreeData(nestedData);
+  }, []);
+
+  let Recurse = ({ root, commentAdded }) => {
     let [showComments, setShowComments] = useState(false);
     let [showTextBox, setShowTextBox] = useState(false);
-    let [reply, setReply] = useState("");
-    let [treeKey, setTreeKey] = useState(root.id);
     let [loadLimit, setLoadLimit] = useState(2);
-
-    // console.log(root)
+    let [treeKey, setTreeKey] = useState("");
 
     const cancel = () => {
       setShowTextBox(false);
@@ -27,41 +81,38 @@ export function NestedComments({data}) {
     const onReply = (reply) => {
       const unique_id = uuid();
       const small_id = unique_id.slice(0, 8);
-
       root.children.unshift({
         id: small_id,
-        name: "Ali",
+        name: userName,
         comment: reply,
+        color: getRandomColor(),
         children: [],
       });
-      setReply("");
       setShowComments(true);
       setShowTextBox(false);
       setTreeKey(small_id);
+      commentAdded({ id: small_id, name: userName, comment: reply });
     };
 
     return (
       <div>
-        {/* <ReplyBox onReply={()=>onReply()}></ReplyBox> */}
         {root.id === 0 && (
           <ReplyBox onReply={(reply) => onReply(reply)}></ReplyBox>
         )}
         <div className={root.id !== 0 ? "recursive-align" : ""}>
           {root.id !== 0 && (
-            
-              <div style={{display: "flex"}}>
-              
-                <div className="circle">
-                  <p className="circle-inner">
-                    {root && root.name.substring(0, 2)}
-                  </p>
-                
+            <div style={{ display: "flex" }}>
+              <div
+                className="circle"
+                style={{ backgroundColor: root.color }}
+                title={root.name}
+              >
+                <p className="circle-inner">
+                  {root && root.name.substring(0, 2)}
+                </p>
               </div>{" "}
-              <div style={{paddingTop: "10px"}}>
-              : {root && root.comment}
-              </div>
-              </div>
-           
+              <div className="nested-comment">: {root && root.comment}</div>
+            </div>
           )}
           {root.id !== 0 && (
             <div className="recursive-reply-button-div">
@@ -82,31 +133,32 @@ export function NestedComments({data}) {
             </div>
           )}
 
-          {((showComments &&
-            root) || root.id === 0) &&
+          {((showComments && root) || root.id === 0) &&
             root.children.slice(0, loadLimit).map((ele) => {
               return (
                 <span key={ele.id}>
-                  {console.log(ele)}
                   <div>
-                    <Recurse root={ele} callBack={callBack} key={treeKey} />
+                    <Recurse root={ele} commentAdded={commentAdded} />
                   </div>
                 </span>
               );
             })}
-          {(!showComments && root.id !== 0) && root.children && root.children.length != 0 && (
-            <p
-              className="recursive-view-replies-button"
-              onClick={() => setShowComments(true)}
-            >
-              view replies
-            </p>
-          )}
+          {!showComments &&
+            root.id !== 0 &&
+            root.children &&
+            root.children.length != 0 && (
+              <p
+                className="recursive-view-replies-button"
+                onClick={() => setShowComments(true)}
+              >
+                view replies
+              </p>
+            )}
           {(showComments || root.id === 0) &&
             root.children.length != 0 &&
             loadLimit < root.children.length && (
               <p
-                style={{ marginLeft: "10px", color: "gray" }}
+                className="show-more-button"
                 onClick={() => {
                   setLoadLimit(loadLimit + loadLimit);
                 }}
@@ -119,35 +171,9 @@ export function NestedComments({data}) {
     );
   };
 
-  let appendChild = (root, node, data) => {
-    if (node === undefined) {
-      return;
-    }
-
-    if (node.id === root.id) {
-      root.children.unshift(data);
-    } else {
-      for (let ele of root.children) {
-        appendChild(ele, node, data);
-      }
-    }
-
-    return root;
-  };
-
-  let updateData = (node, data) => {
-    let root = treeData;
-    let updatedRoot = appendChild(root, node, data);
-    console.log(updatedRoot);
-    setTreeData(updatedRoot);
-    //setTreeKey(data.id)
-  };
-
   return (
     <div>
-      <Recurse root={treeData} callBack={updateData} />
+      <Recurse root={treeData} commentAdded={commentAdded} />
     </div>
   );
 }
-
-
