@@ -117,10 +117,10 @@ export function NestedComments({
       setShowTextBox(false);
       setTreeKey(small_id);
       commentAdded({
-        id: small_id,
-        parent_id: root.id,
-        name: userName,
+        parent: root.id,
+        child: small_id,
         comment: reply,
+        name: userName,
       });
     };
 
