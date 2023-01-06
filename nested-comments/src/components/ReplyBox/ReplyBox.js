@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import "./ReplyBox.css";
 
-function ReplyBox({ onReply, cancel = () => {} }) {
+function ReplyBox({ onReply, cancel = () => {}, isRoot = false }) {
   const [reply, setReply] = useState("");
-  const [showTextBox, setShowTextBox] = useState(false);
-  const [onFocus, setOnFocus] = useState(false);
+
+  const [focus, setOnFocus] = useState(false);
+
   return (
     <div>
       <div
@@ -25,7 +26,7 @@ function ReplyBox({ onReply, cancel = () => {} }) {
           ></input>
         </div>
 
-        {onFocus && (
+        {((isRoot && focus) || !isRoot) && (
           <div
             style={{
               display: "flex",
@@ -77,7 +78,9 @@ function ReplyBox({ onReply, cancel = () => {} }) {
                 }}
                 onClick={() => {
                   setReply("");
+
                   setOnFocus(false);
+
                   cancel();
                 }}
               >

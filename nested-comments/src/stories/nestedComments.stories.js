@@ -57,6 +57,12 @@ stories.add("App", () => {
   ];
 
   return (
-    <NestedComments data={data} commentAdded={commentAdded} userName={"Ali"} />
+    <NestedComments
+      data={data}
+      commentAdded={commentAdded}
+      userName={"Ali"}
+      rootId={-1}
+      paginationSize={5}
+    />
   );
 });

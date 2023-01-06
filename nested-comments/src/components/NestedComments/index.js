@@ -1,1 +1,1 @@
-export * from './NestedComments';
+export * from "./NestedComments.jsx";
