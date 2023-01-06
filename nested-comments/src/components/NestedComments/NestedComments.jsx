@@ -8,11 +8,11 @@ export function NestedComments({
   data = [],
   commentAdded = () => {},
   userName,
-  rootId,
   paginationSize = 2,
 }) {
   const PARENT_ROOT = "*";
   let [treeData, setTreeData] = useState({ children: [], id: PARENT_ROOT });
+  let childSet = new Set();
 
   const getRandomColor = () => {
     var color = "#";
@@ -54,6 +54,7 @@ export function NestedComments({
     let mapRelations = new Map();
 
     data.forEach((ele) => {
+      childSet.add(ele.child);
       if (mapRelations.has(ele.parent)) {
         mapRelations.set(ele.parent, [...mapRelations.get(ele.parent), ele]);
       } else {
@@ -64,13 +65,27 @@ export function NestedComments({
     return mapRelations;
   };
 
+  const getRootId = () => {
+    let res = new Set();
+    data.forEach((ele) => {
+      if (!childSet.has(ele.parent)) {
+        res.add(ele.parent);
+      }
+    });
+
+    return [...res];
+  };
   useEffect(() => {
     let mapRelations = createMap(data);
     let res = [];
-    if (mapRelations.get(rootId)) {
-      mapRelations.get(rootId).forEach((ele, index) => {
-        res.push(createTree(mapRelations.get(rootId)[index], mapRelations));
-      });
+
+    let rootIds = getRootId();
+    if (rootIds.length > 0) {
+      for (let rootId of rootIds) {
+        mapRelations.get(rootId).forEach((ele, index) => {
+          res.push(createTree(mapRelations.get(rootId)[index], mapRelations));
+        });
+      }
     }
 
     let nestedData = { children: [...res], id: PARENT_ROOT };
@@ -80,8 +95,9 @@ export function NestedComments({
   let Recurse = ({ root, commentAdded }) => {
     let [showComments, setShowComments] = useState(false);
     let [showTextBox, setShowTextBox] = useState(false);
-    let [loadLimit, setLoadLimit] = useState(paginationSize);
+    // let [loadLimit, setLoadLimit] = useState(paginationSize);
     let [treeKey, setTreeKey] = useState("");
+    let [currLimit, setCurrLimit] = useState(paginationSize);
 
     const cancel = () => {
       setShowTextBox(false);
@@ -148,7 +164,7 @@ export function NestedComments({
           )}
 
           {((showComments && root) || root.id === PARENT_ROOT) &&
-            root.children.slice(0, loadLimit).map((ele) => {
+            root.children.slice(0, currLimit).map((ele) => {
               return (
                 <span key={ele.id}>
                   <div>
@@ -170,11 +186,11 @@ export function NestedComments({
             )}
           {(showComments || root.id === PARENT_ROOT) &&
             root.children.length != PARENT_ROOT &&
-            loadLimit < root.children.length && (
+            currLimit < root.children.length && (
               <p
                 className="show-more-button"
                 onClick={() => {
-                  setLoadLimit(loadLimit + loadLimit);
+                  setCurrLimit(currLimit + paginationSize);
                 }}
               >
                 show more

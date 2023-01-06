@@ -13,7 +13,7 @@ const commentAdded = (reply) => {
 stories.add("App", () => {
   let data = [
     {
-      parent: -1,
+      parent: 0,
       child: 1,
       comment: "root comment",
       name: "Ali",
@@ -51,7 +51,37 @@ stories.add("App", () => {
     {
       parent: -1,
       child: 10,
-      comment: "mah commentzzzzzzzzz!!!",
+      comment: "mah commentzzzzzzzzz!!!111",
+      name: "Dark Master",
+    },
+    {
+      parent: 7,
+      child: 11,
+      comment: "mah commentzzzzzzzzz!!!222",
+      name: "Dark Master",
+    },
+    {
+      parent: 1551,
+      child: 500,
+      comment: "mah commentzzzzzzzzz!!!4444",
+      name: "Dark Master",
+    },
+    {
+      parent: 1552,
+      child: 503,
+      comment: "mah commentzzzzzzzzz!!!4444",
+      name: "Dark Master",
+    },
+    {
+      parent: 1557,
+      child: 509,
+      comment: "mah commentzzzzzzzzz!!!4444",
+      name: "Dark Master",
+    },
+    {
+      parent: 1559,
+      child: 5113,
+      comment: "mah commentzzzzzzzzz!!!4444",
       name: "Dark Master",
     },
   ];
@@ -61,8 +91,7 @@ stories.add("App", () => {
       data={data}
       commentAdded={commentAdded}
       userName={"Ali"}
-      rootId={-1}
-      paginationSize={5}
+      // paginationSize={5}
     />
   );
 });
