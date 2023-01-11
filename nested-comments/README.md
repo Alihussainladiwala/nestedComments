@@ -2,7 +2,7 @@
 
 This is a simple react library which supports Reddit like nested comments.
 
-![Lib GIF](https://raw.githubusercontent.com/Alihussainladiwala/nestedComments/main/nested-comments/resources/libraryGIF.gif "libGIF")
+<img src="https://raw.githubusercontent.com/Alihussainladiwala/nestedComments/main/nested-comments/resources/libraryGIF.gif" width="400" height="400" />
 
 ### Options:
 
