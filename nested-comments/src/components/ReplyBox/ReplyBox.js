@@ -41,6 +41,7 @@ function ReplyBox({ onReply, cancel = () => {}, isRoot = false }) {
                     borderRadius: "5px",
                     borderStyle: "none",
                     padding: "8px",
+                    cursor: "pointer",
                   }}
                   onClick={() => {
                     onReply(reply);
@@ -59,6 +60,7 @@ function ReplyBox({ onReply, cancel = () => {}, isRoot = false }) {
                     padding: "8px",
                     backgroundColor: "blue",
                     color: "white",
+                    cursor: "pointer",
                   }}
                   onClick={() => {
                     onReply(reply);
@@ -75,6 +77,7 @@ function ReplyBox({ onReply, cancel = () => {}, isRoot = false }) {
                   borderRadius: "5px",
                   borderStyle: "none",
                   padding: "8px",
+                  cursor: "pointer",
                 }}
                 onClick={() => {
                   setReply("");

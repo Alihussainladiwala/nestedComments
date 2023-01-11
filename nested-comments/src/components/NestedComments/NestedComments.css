@@ -10,28 +10,37 @@
     display: grid;
     grid-template-rows: 32px 32px;
     max-width: 30px;
+    margin-top: 10px;
+    margin-left: 5px;
   }
   
   .recursive-view-replies-button {
-    margin-left: 10px;
+    margin-left: 15px;
     color: gray;
     cursor: pointer;
   }
   
   .recursive-reply-button {
-    margin-left: 5px;
-    padding: 0px 5px 1px 5px;
+    padding: 0px;
     font-size: 15px;
+    font-weight: 500;
+    color: #585858;
+    margin: 0px;
   }
   
   .recursive-reply-button-div{
-    max-width: 60px;
+    max-width: 80px;
     cursor: pointer;
+    display: flex;
+    border-radius: 10px;
+    margin: 0px 0px 0px 0px;
+    padding:2px;
+    margin: 5px 0px 5px 3px;
   }
 
   .recursive-reply-button-div:hover {
     background-color: rgb(235, 233, 233);
-    border-radius: 50px;
+    
   }
   
   .circle {
@@ -60,6 +69,11 @@
   }
 
   .nested-comment{
-    padding-top: 10px
+    padding-top: 13px;
+    margin-left: 4px;
   }
   
+  .reply-img-div{
+    margin-top: 14px;
+    margin: 0px 10px 0px 10px;
+  }

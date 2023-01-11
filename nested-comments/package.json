@@ -1,6 +1,6 @@
 {
   "name": "nested-comments-react",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "A simple react component for nested comments",
   "main": "dist/index.js",
   "module": "dist/index.es.js",

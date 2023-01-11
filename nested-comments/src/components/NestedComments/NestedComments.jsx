@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import ReplyBox from "../ReplyBox/ReplyBox";
 import "./NestedComments.css";
 import { v4 as uuid } from "uuid";
+import logo from "../../assets/reply-icon.svg";
 
 export function NestedComments({
   data = [],
@@ -13,36 +14,42 @@ export function NestedComments({
   const PARENT_ROOT = "*";
   let [treeData, setTreeData] = useState({ children: [], id: PARENT_ROOT });
   let childSet = new Set();
+  const mapColors = new Map();
 
-  const getRandomColor = () => {
+  const getRandomColor = (userId) => {
+    if (userId !== undefined && mapColors.has(userId))
+      return mapColors.get(userId);
+
     var color = "#";
     for (var i = 0; i < 6; i++) {
       color += Math.floor(Math.random() * 10);
     }
+    if (userId !== undefined) mapColors.set(userId, color);
+
     return color;
   };
 
   const createTree = (src, mapRelations) => {
-    if (!mapRelations.has(src.child)) {
+    if (!mapRelations.has(src.childId)) {
       let obj = {
-        id: src.child,
+        id: src.childId,
         name: src.name,
         comment: src.comment,
-        color: getRandomColor(),
+        color: src.color !== undefined ? src.color : getRandomColor(src.userId),
         children: [],
       };
       return obj;
     } else {
       let children = [];
       let obj = {
-        id: src.child,
+        id: src.childId,
         name: src.name,
         comment: src.comment,
-        color: getRandomColor(),
+        color: src.color !== undefined ? src.color : getRandomColor(src.userId),
         children,
       };
 
-      mapRelations.get(src.child).forEach((ele) => {
+      mapRelations.get(src.childId).forEach((ele) => {
         children.push(createTree(ele, mapRelations));
       });
 
@@ -54,11 +61,14 @@ export function NestedComments({
     let mapRelations = new Map();
 
     data.forEach((ele) => {
-      childSet.add(ele.child);
-      if (mapRelations.has(ele.parent)) {
-        mapRelations.set(ele.parent, [...mapRelations.get(ele.parent), ele]);
+      childSet.add(ele.childId);
+      if (mapRelations.has(ele.parentId)) {
+        mapRelations.set(ele.parentId, [
+          ...mapRelations.get(ele.parentId),
+          ele,
+        ]);
       } else {
-        mapRelations.set(ele.parent, [ele]);
+        mapRelations.set(ele.parentId, [ele]);
       }
     });
 
@@ -68,8 +78,8 @@ export function NestedComments({
   const getRootId = () => {
     let res = new Set();
     data.forEach((ele) => {
-      if (!childSet.has(ele.parent)) {
-        res.add(ele.parent);
+      if (!childSet.has(ele.parentId)) {
+        res.add(ele.parentId);
       }
     });
 
@@ -95,7 +105,6 @@ export function NestedComments({
   let Recurse = ({ root, commentAdded }) => {
     let [showComments, setShowComments] = useState(false);
     let [showTextBox, setShowTextBox] = useState(false);
-    // let [loadLimit, setLoadLimit] = useState(paginationSize);
     let [treeKey, setTreeKey] = useState("");
     let [currLimit, setCurrLimit] = useState(paginationSize);
 
@@ -117,8 +126,8 @@ export function NestedComments({
       setShowTextBox(false);
       setTreeKey(small_id);
       commentAdded({
-        parent: root.id,
-        child: small_id,
+        parentId: root.id,
+        childId: small_id,
         comment: reply,
         name: userName,
       });
@@ -141,17 +150,22 @@ export function NestedComments({
                   {root && root.name && root.name.substring(0, 2)}
                 </p>
               </div>{" "}
-              <div className="nested-comment">: {root && root.comment}</div>
+              <div className="nested-comment">{root && root.comment}</div>
             </div>
           )}
           {root.id !== PARENT_ROOT && (
             <div className="recursive-reply-button-div">
-              <p
-                onClick={() => setShowTextBox(!showTextBox)}
-                className="recursive-reply-button"
-              >
-                Reply
-              </p>
+              <div className="reply-img-div">
+                <img src={logo} alt="replyIcon" width={10} height={10} />
+              </div>
+              <div>
+                <p
+                  onClick={() => setShowTextBox(!showTextBox)}
+                  className="recursive-reply-button"
+                >
+                  Reply
+                </p>
+              </div>
             </div>
           )}
           {showTextBox && (
