@@ -10,21 +10,23 @@ export function NestedComments({
   commentAdded = () => {},
   userName,
   paginationSize = 2,
+  userId,
 }) {
   const PARENT_ROOT = "*";
   let [treeData, setTreeData] = useState({ children: [], id: PARENT_ROOT });
   let childSet = new Set();
-  const mapColors = new Map();
+  let [mapColors, setMapColors] = useState({});
 
   const getRandomColor = (userId) => {
-    if (userId !== undefined && mapColors.has(userId))
-      return mapColors.get(userId);
+    let mapColorsCopy = { ...mapColors };
+    if (userId !== undefined && mapColorsCopy.userId !== undefined)
+      return mapColors.userId;
 
     var color = "#";
     for (var i = 0; i < 6; i++) {
       color += Math.floor(Math.random() * 10);
     }
-    if (userId !== undefined) mapColors.set(userId, color);
+    if (userId !== undefined) setMapColors({ ...mapColors, userId: color });
 
     return color;
   };
@@ -119,17 +121,18 @@ export function NestedComments({
         id: small_id,
         name: userName,
         comment: reply,
-        color: getRandomColor(),
+        color: getRandomColor(userId),
         children: [],
       });
       setShowComments(true);
       setShowTextBox(false);
       setTreeKey(small_id);
       commentAdded({
-        parentId: root.id,
+        parentId: root.id == "*" ? uuid().slice(0, 8) : root.id,
         childId: small_id,
         comment: reply,
         name: userName,
+        userId: userId,
       });
     };
 

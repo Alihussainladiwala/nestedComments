@@ -64,6 +64,7 @@ stories.add("App", () => {
       commentAdded={commentAdded}
       userName={"Ali"}
       paginationSize={3}
+      userId={1}
     />
   );
 });
