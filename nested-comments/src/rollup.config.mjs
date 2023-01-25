@@ -3,7 +3,6 @@ import resolve from "@rollup/plugin-node-resolve";
 import external from "rollup-plugin-peer-deps-external";
 import postcss from "rollup-plugin-postcss";
 import { terser } from "rollup-plugin-terser";
-import svg from "rollup-plugin-svg";
 
 export default [
   {
@@ -31,7 +30,6 @@ export default [
       external(),
       resolve(),
       terser(),
-      svg(),
     ],
   },
 ];

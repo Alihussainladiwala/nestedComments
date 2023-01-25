@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import ReplyBox from "../ReplyBox/ReplyBox";
 import "./NestedComments.css";
 import { v4 as uuid } from "uuid";
-import logo from "../../assets/reply-icon.svg";
+import ReplyIcon from "../Svg/ReplyIcon";
 
 export function NestedComments({
   data = [],
@@ -159,7 +159,7 @@ export function NestedComments({
           {root.id !== PARENT_ROOT && (
             <div className="recursive-reply-button-div">
               <div className="reply-img-div">
-                <img src={logo} alt="replyIcon" width={10} height={10} />
+                <ReplyIcon className="reply-icon" />
               </div>
               <div>
                 <p

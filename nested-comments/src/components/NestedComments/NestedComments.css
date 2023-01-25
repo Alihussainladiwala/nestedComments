@@ -28,6 +28,11 @@
     margin: 0px;
   }
   
+  .reply-icon{
+    width: 10px;
+    height: 10px;
+  }
+  
   .recursive-reply-button-div{
     max-width: 80px;
     cursor: pointer;

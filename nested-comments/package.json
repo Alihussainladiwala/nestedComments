@@ -1,6 +1,6 @@
 {
   "name": "nested-comments-react",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A simple react component for nested comments",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "build-lib": "rollup --config ./src/rollup.config.mjs"
+    "build-lib": "rollup --config ./src/rollup.config.mjs",
+    "build:svg": "npx @svgr/cli --out-dir ./src/components/Svg -- ./src/assets/"
   },
   "author": "Alihussain Altafhussain Ladiwala",
   "license": "MIT",
@@ -31,6 +32,7 @@
     "@storybook/manager-webpack4": "^6.5.14",
     "@storybook/react": "^6.5.14",
     "@storybook/testing-library": "^0.0.13",
+    "@svgr/cli": "^6.5.1",
     "babel-loader": "^8.3.0",
     "postcss": "^8.4.20",
     "react": "^18.2.0",
@@ -38,8 +40,11 @@
     "rollup": "^3.9.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-svg": "^2.0.0",
     "rollup-plugin-terser": "^7.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Alihussainladiwala/nestedComments.git"
   },
   "peerDependencies": {
     "react": "^18.2.0",
